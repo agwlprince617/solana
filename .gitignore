@@ -1,0 +1,27 @@
+# Node.js
+node_modules
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+*.env
+
+# Solana specific
+target/
+*.so
+*.rs
+
+# Local configuration files
+local-wallet.json
+funded-keypair.json
+*.log
+
+# MacOS Finder
+.DS_Store
+
+# Linux
+*~
+
+# Exclude the test-ledger folder from being ignored
+test-ledger/
