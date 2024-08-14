@@ -8,6 +8,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm run dev`
+run the extension as a react app in the web.
+
 ### `npm run build`
 bundle the extension.
 
