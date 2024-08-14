@@ -6,16 +6,17 @@ import SendTransaction from './components/SendTransaction';
 import './App.css';
 
 const App = () => {
-  const { address, getBalance, sendTransaction, createWallet } = useWallet();
+  const { address, getBalance, sendTransaction, createWallet,getTransactionHistory } = useWallet();
   const [balance, setBalance] = useState<number|null>(0);
-  const [transactionHistory, setTransactionHistory] = useState<string[]>([]);
+  const [transactionHistory, setTransactionHistory] = useState<any[]>([]);
 
   useEffect(() => {
     // let add = localStorage.getItem('public-key')
     if (address) {
       fetchBalance();
+      handleHistory()
     }
-  }, [address]);
+  }, [address,balance]);
 
   const fetchBalance = async () => {
     const balance = await getBalance();
@@ -24,8 +25,17 @@ const App = () => {
 
   const handleSendTransaction = async (recipient:string, amount:string) => {
     const txHash = await sendTransaction(recipient, amount);
-    setTransactionHistory([...transactionHistory, txHash]);
+    handleHistory()
+    fetchBalance()
+    // setTransactionHistory([...transactionHistory, txHash]);
+    // setTransactionHistory()
   };
+
+  const handleHistory = async()=>{
+    let transactions = await getTransactionHistory()
+    setTransactionHistory(transactions)
+    console.log(transactions);
+  }
 
   return (
     <div className="App">

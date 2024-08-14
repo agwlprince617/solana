@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Connection, clusterApiUrl, Keypair, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL,sendAndConfirmTransaction } from '@solana/web3.js';
+import { Connection, clusterApiUrl, Keypair, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL,sendAndConfirmTransaction,  } from '@solana/web3.js';
 import { Buffer } from 'buffer'; // Import the Buffer polyfill
 
 window.Buffer = Buffer; 
@@ -60,6 +60,40 @@ export const useWallet = () => {
     return newKeypair.publicKey.toBase58();
   };
 
+  const getTransactionHistory = async () => {
+    if (!keypair) throw new Error('No wallet connected');
+
+    const signatures = await connection.getConfirmedSignaturesForAddress2(
+      keypair.publicKey
+    );
+    console.log(signatures);
+
+    const transactions = await Promise.all(
+      signatures.map(async ({ signature }) => {
+        const tx = await connection.getConfirmedTransaction(signature);
+        console.log(tx);
+        return tx;
+      })
+    );
+    console.log(transactions);
+
+    return transactions.map((tx) => {
+      const { meta, transaction } = tx;
+      const { preBalances, postBalances,fee } = meta;
+      const amount = (preBalances[0] - postBalances[0]-fee) / LAMPORTS_PER_SOL;
+      const toAddress = transaction._message.accountKeys[1].toBase58();
+      const fromAddress = transaction._message.accountKeys[0].toBase58();
+
+      return {
+        signature: tx.transaction.signatures[0],
+        from: fromAddress,
+        to: toAddress,
+        amount,
+        status: meta.err ? 'Failed' : 'Success',
+      };
+    });
+  };
+
   useEffect(() => {
     if (keypair) {
       localStorage.setItem(
@@ -77,5 +111,6 @@ export const useWallet = () => {
     getBalance,
     sendTransaction,
     createWallet,
+    getTransactionHistory
   };
 };

@@ -1,14 +1,15 @@
 import React from 'react';
+import TransactionTile from './TransactionTile';
 
 const TransactionHistory = ({ transactions }) => {
   return (
     <div>
       <h3>Transaction History</h3>
-      <ul>
+      
         {transactions.map((tx, index) => (
-          <li key={index}>{tx}</li>
+          <TransactionTile tx={tx} key={tx.signature}/>
         ))}
-      </ul>
+      
     </div>
   );
 };
