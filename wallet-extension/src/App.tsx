@@ -43,6 +43,7 @@ const App = () => {
       {address ? (
         <>
           <WalletInfo address={address} balance={balance} />
+          <button onClick={()=>fetchBalance()}>Refresh</button>
           <SendTransaction onSendTransaction={handleSendTransaction} />
           <TransactionHistory transactions={transactionHistory} />
         </>
