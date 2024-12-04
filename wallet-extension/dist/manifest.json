@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "name": "Wallet",
+  "permissions": [
+    "webRequest",
+    "activeTab",
+    "scripting",
+    "storage",
+    "nativeMessaging",
+    "tabs"
+  ],
+  "host_permissions": ["*://*/*"],
+  "action": {
+    "default_popup": "js/index.html",
+    "default_title": "wallet"
+  },
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["js/contentScript.js"]
+    }
+  ]
+}
